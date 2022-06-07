@@ -2478,7 +2478,8 @@ int SlidingMinPDPlugin::Bootscan(char *File1, char *File2, double ***dist_frags,
 //				j++;
 //			}
 //		}
-		fp2 = (FILE *) fopen("BootResults.txt","w") ;
+
+		//fp2 = (FILE *) fopen("BootResults.txt","w") ;
 
 		printf("Detection Phase: ");
 		s=1;
