@@ -1404,11 +1404,11 @@ int SlidingMinPDPlugin::GetMinDist(Mintaxa **minresults, Fasta **seqs, double **
 	if( win_Count>1){
 		if((Frag_Seq= (int *) malloc((win_Count)* sizeof (int)))==NULL)
 			return(0);
-		if ((fp3 = (FILE *) fopen("Frag_Dists.txt","w")) == NULL) {
+		if ((fp3 = (FILE *) fopen((std::string(PluginManager::prefix())+"/Frag_Dists.txt").c_str(),"w")) == NULL) {
 			printf("io2: error when opening Frag_Dists.txt files\n");
 				return(1);
 		}
-		if ((fp4 = (FILE *) fopen("Recs.txt","w")) == NULL) {
+		if ((fp4 = (FILE *) fopen((std::string(PluginManager::prefix())+"/Recs.txt").c_str(),"w")) == NULL) {
 			printf("io2: error when opening Recs.txt files\n");
 				return(1);
 		}
@@ -1422,11 +1422,11 @@ int SlidingMinPDPlugin::GetMinDist(Mintaxa **minresults, Fasta **seqs, double **
 		dist[i][i]=0;
 	/* printing results to file... */
 	printf("printing results to file...\n");
-	if ((fp2 = (FILE *) fopen(File2,"w")) == NULL) {
+	if ((fp2 = (FILE *) fopen((std::string(PluginManager::prefix())+std::string(File2)).c_str(),"w")) == NULL) {
 		printf("io2: error when opening SeqDistances.txt files\n");
 			return(1);
 	}
-	if ((fp1 = (FILE *) fopen(File1,"w")) == NULL) 
+	if ((fp1 = (FILE *) fopen((std::string(PluginManager::prefix())+std::string(File1)).c_str(),"w")) == NULL) 
 		  ErrorMessageExit("io2: error when opening MinDists.txt file\n",1);
 	
 
@@ -2391,17 +2391,21 @@ int SlidingMinPDPlugin::Bootscan(char *File1, char *File2, double ***dist_frags,
 	BKPNode *bkpLL;
 	Mintaxa *mintaxa;
 	int writeMatrix;
-
+	std::string bootF = std::string(PluginManager::prefix())+"/BootResults.txt";
+	std::string fragF = std::string(PluginManager::prefix())+"/Frag_Dists.txt";
+	std::string F1pfx = /*std::string(PluginManager::prefix())+*/std::string(File1);
+	std::string F2pfx = std::string(PluginManager::prefix())+std::string(File2);
+	std::cout << F1pfx << " " << F2pfx << std::endl;
 	 if((mintaxa = (Mintaxa *) malloc(sizeof(Mintaxa) * 20))==NULL)
 		ErrorMessageExit("Bootscan 1: Error with Mintaxa memory allocation\n",1);
 	
-		if ((fp2 = (FILE *) fopen("BootResults.txt","w")) == NULL) 
+		if ((fp2 = (FILE *) fopen(bootF.c_str(),"w")) == NULL) 
 			ErrorMessageExit("io2: error when opening BootResults.txt File\n",1);
-		if ((fp3 = (FILE *) fopen("Frag_Dists.txt","w")) == NULL) 
+		if ((fp3 = (FILE *) fopen(fragF.c_str(),"w")) == NULL) 
 			ErrorMessageExit("io2: error when opening Frag_Dists.txt files\n",1);
-		if ((fp1 = (FILE *) fopen(File1,"w")) == NULL) 
+		if ((fp1 = (FILE *) fopen(F1pfx.c_str(),"w")) == NULL) 
 			ErrorMessageExit("io2: error when opening output file\n",1);
-		if ((fp_d = (FILE *) fopen(File2,"w")) == NULL) 
+		if ((fp_d = (FILE *) fopen(F2pfx.c_str(),"w")) == NULL) 
 			ErrorMessageExit("io2: error when opening SeqDistances.txt files\n",1);
 
 	//	if((bootVals = (double **)MatrixInit(sizeof(double), n, n))==NULL)
@@ -2584,12 +2588,12 @@ void SlidingMinPDPlugin::PrintUsage()
 /**************************************************************/
 void SlidingMinPDPlugin::ReadParams( char *inputFile, char *outputFile, int *opt, int *align,  int *wSize, int *stSize, char* ifile)
 {
+	printf("READPARAMS\n");
 	int  j,k;
 	char ch, cch, str[255], *str2;
 	FILE *fp1;
 	FILE* fpIn;
 	//char *P;
-	
 	*align=0;
 	if ((fpIn = (FILE *) fopen(ifile, "r")) == NULL) {
                                                 printf("io2: error when opening file:%s.\n%s\n",ifile,strerror(errno));
@@ -2907,7 +2911,7 @@ void SlidingMinPDPlugin::input(std::string infile){
 
 	printf("Reading File:... ");
 	fflush(stdout);
-	ReadParams(inputFile,outputFile1, &opt,  
+	ReadParams(inputFile, outputFile1, &opt,  
 				 &align,  &wSize,&stSize, inFile);
 
 	if(opt==0)/* Turn off recombination detection*/
