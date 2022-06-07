@@ -11,6 +11,23 @@
 #include <errno.h>
 #include "PluginProxy.h"
 
+#define TOLERANCE 1.0e-10
+
+/* Period parameters */  
+//#define N 624
+//#define M 397
+#define MATRIX_A 0x9908b0df   /* constant vector a */
+#define UPPER_MASK 0x80000000 /* most significant w-r bits */
+#define LOWER_MASK 0x7fffffff /* least significant r bits */
+
+/* Tempering parameters */   
+#define TEMPERING_MASK_B 0x9d2c5680
+#define TEMPERING_MASK_C 0xefc60000
+#define TEMPERING_SHIFT_U(y)  (y >> 11)
+#define TEMPERING_SHIFT_S(y)  (y << 7)
+#define TEMPERING_SHIFT_T(y)  (y << 15)
+#define TEMPERING_SHIFT_L(y)  (y >> 18)
+
 class SlidingMinPDPlugin : public Plugin {
 	      public:
            void input(std::string);;
@@ -18,6 +35,10 @@ class SlidingMinPDPlugin : public Plugin {
            void output(std::string);;
 
    private:
+int z_rndu=137;
+unsigned w_rndu=13757;
+unsigned long mt[624]; /* the array for the state vector  */
+int mti=625; /* mti==N+1 means mt[N] is not initialized */
         FILE    *fp1;
         char    *cc, inputFile[100], outputFile1[100], outputFile2[100];
         char    temp[LINELIMIT], temp2[MAXLENGHT], timechar[3];
@@ -105,6 +126,12 @@ void AddTipOrNode(int *w,int *p,int *max_w, int chidx, double brlen,TNode **Node
 void NJTree(TNode **NodeStorage, double **DistMatrix, int UBound, int OutgroupIn0, int *seqIds, int *max_w, int *w);
 int MatricizeTopology(TNode *node, int *topoMatrix, int n, int **dist, double avgBrLen,int *max);
 double GetAvgBrLen(TNode *node, int *nodes);
+void SetSeed (unsigned long seed);
+double rndu (void);
+
+double rndgamma (double s);
+double zeroin(double ax, double bx, double (*f)(double x));
+int DiscreteGamma (double freqK[], double rK[], double alfa, double beta, int K, int median);
 
 };
 
