@@ -40,7 +40,7 @@ unsigned w_rndu=13757;
 unsigned long mt[624]; /* the array for the state vector  */
 int mti=625; /* mti==N+1 means mt[N] is not initialized */
         FILE    *fp1;
-        char    *cc, inputFile[100], outputFile1[100], outputFile2[100];
+        char    *cc, inputFile[300], outputFile1[300], outputFile2[300];
         char    temp[LINELIMIT], temp2[MAXLENGHT], timechar[3];
         int             i, k, n,j,win_Count, fr_Dim, align, opt, res_no =0;
         double  **dist, ***dist_frags;
@@ -64,7 +64,7 @@ int recOn = 1;
 int reportDistances=0;
 double gapPenalty = 1;/* 1 is default: means gap columns are ignored are not counted*/
 int printBoot=0;
-char codonFile[100];
+char codonFile[200];
 int clustBoot=0;
 int *codonList;
 

@@ -2629,6 +2629,7 @@ void SlidingMinPDPlugin::ReadParams( char *inputFile, char *outputFile, int *opt
 	
 	while(!feof(fpIn)){
 		ch=toupper(ch);
+			std::cout << ch << std::endl;
 		switch (ch) {
 			case 'A':
 				if (fscanf(fpIn, "%lf", &alpha)!=1 || alpha<0.0) {
